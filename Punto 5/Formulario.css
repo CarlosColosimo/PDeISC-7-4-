@@ -1,0 +1,12 @@
+.formulario {
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .formulario input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
