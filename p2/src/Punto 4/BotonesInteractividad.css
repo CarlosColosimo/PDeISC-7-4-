@@ -1,0 +1,57 @@
+/* BotonesInteractividad.css */
+.contenedor-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 600px; 
+}
+
+.contenedor-botones button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contenedor-botones button.clicked {
+    background-color: #00f;
+    color: #fff;
+}
+
+.contenedor-botones button.clicked-size {
+    font-size: 24px;
+}
+
+.contenedor-botones button.clicked-hide {
+    display: none;
+}
+
+.contenedor-botones button.clicked-show-text {
+    background-color: #0f0;
+}
+
+.contenedor-botones button.clicked-disable {
+    cursor: not-allowed;
+}
+
+.contenedor-botones button.clicked-enable {
+    cursor: pointer;
+}
+
+.contenedor-botones button.clicked-text-color {
+    color: #f00;
+}
+
+.contenedor-botones button.clicked-border {
+    border: 2px solid #f00;
+}
+
+.contenedor-botones button.clicked-opacity {
+    opacity: 0.5;
+}
+
+.contenedor-botones button.clicked-change-text {
+    content: "Cambiasooooo";
+}
