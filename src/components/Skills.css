@@ -1,0 +1,29 @@
+/* Skills.css */
+
+.skills {
+    background-color: #007bff;
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .skills h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+  
+  .skills ul {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .skills ul li {
+    background-color: white;
+    color: #007bff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+  }
+  

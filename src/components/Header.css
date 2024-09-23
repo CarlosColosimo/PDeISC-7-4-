@@ -1,0 +1,27 @@
+/* Header.css */
+
+.header {
+  text-align: center;
+  padding: 20px;
+  background-color: #007bff;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 3rem;
+}
+
+.header p {
+  font-size: 1.2rem;
+}
+
+.header button {
+  margin-top: 10px;
+  background-color: white;
+  color: #007bff;
+}
+
+.header button:hover {
+  background-color: #f4f4f9;
+}
