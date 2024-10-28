@@ -1,4 +1,4 @@
-// TOMAMOS LOS VALORES QUE ESTAN EN EL HTML
+// Array con las palabras posibles para adivinar
 const palabras = [ 
     "JAVASCRIPT", "AHORCADO", "PROGRAMACION", 
     "HTML", "CSS", "AMOR", "PAZ", "FELICIDAD",
@@ -12,14 +12,14 @@ const palabras = [
     "HAMBURGUESA", "TECLADO", "JSON", "PAJARO", "PROFESOR", "ALUMNO", "PELOTA", "VOCALES", "VISUAL"
 ];
 
-let palabraElegida = '';
-let palabraAdivinada = [];
-let errores = 0;
-const maxErrores = 7;
-let puntos = 0;
-let playerName = '';
+let palabraElegida = ''; // Almacena la palabra seleccionada aleatoriamente
+let palabraAdivinada = []; // Array para almacenar letras adivinadas o guiones bajos
+let errores = 0; // Contador de errores
+const maxErrores = 7; // Número máximo de errores permitidos
+let puntos = 0; // Contador de puntos
+let playerName = ''; // Almacena el nombre del jugador
 
-// TOMAMOS LOS VALORES QUE ESTAN EN EL HTML
+// Toma de elementos del HTML
 const elementoPalabra = document.getElementById('word');
 const elementoMensaje = document.getElementById('message');
 const elementoLetras = document.getElementById('letters');
@@ -30,25 +30,24 @@ const intro = document.getElementById('intro');
 const formName = document.getElementById('name-form');
 const playerNameInput = document.getElementById('player-name');
 
-
-// FUNCION PARA ELEGIR UNA PALABRA ALEATORIA
+// Función para elegir una palabra aleatoria del array
 function elegirPalabra() {
     const indiceAleatorio = Math.floor(Math.random() * palabras.length);
     palabraElegida = palabras[indiceAleatorio];
 }
 
-// FUNCION PARA MOSTRAR LA PALABRA CON GUIONES
+// Función para mostrar la palabra en la interfaz con guiones bajos para las letras no adivinadas
 function mostrarPalabra() {
     elementoPalabra.innerHTML = palabraAdivinada.join(' ');
 }
 
-// FUNCION PARA ACTUALIZAR LOS PUNTOS
+// Función para actualizar el puntaje en función de la cantidad de puntos ganados o perdidos
 function actualizarPuntos(cantidad) {
     puntos += cantidad;
     elementoPuntos.innerHTML = puntos;
 }
 
-// FUNCION PARA REINICIAR EL JUEGO
+// Función para reiniciar el juego, reseteando errores, puntaje y el estado de las letras
 function reiniciarJuego() {
     errores = 0;
     palabraAdivinada = [];
@@ -56,23 +55,28 @@ function reiniciarJuego() {
     elementoMensaje.innerHTML = '';
     elementoPuntos.innerHTML = puntos;
 
+    // Habilita todos los botones de letras
     elementoLetras.querySelectorAll('.letter').forEach(boton => {
         boton.disabled = false;
     });
-    imagenAhorcado.src = `images/0.png`;
-    elegirPalabra();
 
+    // Reinicia la imagen del ahorcado
+    imagenAhorcado.src = `images/0.png`;
+
+    // Elige una nueva palabra y la muestra como guiones bajos
+    elegirPalabra();
     for (let i = 0; i < palabraElegida.length; i++) {
         palabraAdivinada.push('_');
     }
     mostrarPalabra();
 }
 
-// FUNCION PARA MANEJAR LA ADIVINANZA
+// Función para manejar el intento de adivinar una letra
 function manejarAdivinanza(event) {
     const letra = event.target.innerHTML;
     let adivinanzaCorrecta = false;
 
+    // Verifica si la letra está en la palabra elegida y actualiza el array `palabraAdivinada`
     for (let i = 0; i < palabraElegida.length; i++) {
         if (palabraElegida[i] === letra) {
             palabraAdivinada[i] = letra;
@@ -80,22 +84,23 @@ function manejarAdivinanza(event) {
         }
     }
 
+    // Actualiza los puntos en función de si la adivinanza fue correcta o no
     if (adivinanzaCorrecta) {
         actualizarPuntos(50);
     } else {
         errores++;
-        imagenAhorcado.src = `images/${errores}.png`;
+        imagenAhorcado.src = `images/${errores}.png`; // Muestra la imagen del ahorcado según los errores
         actualizarPuntos(-5);
     }
-    mostrarPalabra();
-    event.target.disabled = true;
-    verificarEstadoJuego();
+
+    mostrarPalabra(); // Muestra la palabra con las letras adivinadas
+    event.target.disabled = true; // Deshabilita el botón de la letra adivinada
+    verificarEstadoJuego(); // Verifica si el juego ha terminado
 }
 
-
-// FUNCION PARA GUARDAR EL PUNTAJE EN LA BASE DE DATOS
+// Función para guardar el puntaje en la base de datos
 function guardarPuntaje() {
-    fetch('http://localhost:3000/guardar-puntaje', { // URL DEL ENDPOINT
+    fetch('http://localhost:3000/guardar-puntaje', { // URL del endpoint
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -103,12 +108,12 @@ function guardarPuntaje() {
         body: JSON.stringify({
             nombre: playerName,
             puntos: puntos,
-            fecha: new Date().toISOString() // USA LA FECHA ACTUAL
+            fecha: new Date().toISOString() // Fecha actual en formato ISO
         })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor'); //-------------| VERIFICA LOS DATOS 
+            throw new Error('Error en la respuesta del servidor');
         }
         return response.json();
     })
@@ -116,19 +121,19 @@ function guardarPuntaje() {
         console.log('Puntaje guardado con éxito', data);
     })
     .catch(error => {                                                             
-        console.error('Error al guardar el puntaje:', error); // -----------------|
+        console.error('Error al guardar el puntaje:', error);
     });
 }
 
-// FUNCION PARA VERIFICAR SI GANAMOS O PERDIMOS
+// Función para verificar el estado del juego (si ganó o perdió)
 function verificarEstadoJuego() {
-    if (!palabraAdivinada.includes('_')) {
+    if (!palabraAdivinada.includes('_')) { // Verifica si ganó (no hay guiones bajos)
         elementoMensaje.innerHTML = '¡Ganaste!';
         elementoLetras.querySelectorAll('.letter').forEach(boton => {
             boton.disabled = true;
         });
-        guardarPuntaje();
-    } else if (errores >= maxErrores) {
+        guardarPuntaje(); // Guarda el puntaje en la base de datos
+    } else if (errores >= maxErrores) { // Verifica si perdió (excedió el límite de errores)
         elementoMensaje.innerHTML = `Perdiste. La palabra era: ${palabraElegida}`;
         elementoLetras.querySelectorAll('.letter').forEach(boton => {
             boton.disabled = true;
@@ -137,8 +142,7 @@ function verificarEstadoJuego() {
     }
 }
 
-
-// MANEJAR EL ENVÍO DEL FORMULARIO DE NOMBRE
+// Manejador para el envío del formulario de nombre
 formName.addEventListener('submit', function(event) {
     event.preventDefault();
     playerName = playerNameInput.value.trim();
@@ -149,11 +153,10 @@ formName.addEventListener('submit', function(event) {
     }
 });
 
-// AGREGAMOS UN LISTENER AL BOTÓN DE REINICIAR JUEGO
+// Agrega un listener al botón de reiniciar juego
 botonReiniciar.addEventListener('click', reiniciarJuego);
 
-// AGREGAMOS UN LISTENER A LOS BOTONES DE LAS LETRAS
+// Agrega un listener a los botones de letras para manejar cada adivinanza
 elementoLetras.querySelectorAll('.letter').forEach(boton => {
     boton.addEventListener('click', manejarAdivinanza);
-
 });
