@@ -1,4 +1,6 @@
-// Array con las palabras posibles para adivinar
+//Hola profe!
+
+// Array con las posibles palabras para adivinar
 const palabras = [ 
     "JAVASCRIPT", "AHORCADO", "PROGRAMACION", 
     "HTML", "CSS", "AMOR", "PAZ", "FELICIDAD",
@@ -13,10 +15,10 @@ const palabras = [
 ];
 
 let palabraElegida = ''; // Almacena la palabra seleccionada aleatoriamente
-let palabraAdivinada = []; // Array para almacenar letras adivinadas o guiones bajos
-let errores = 0; // Contador de errores
+let palabraAdivinada = []; // Array para almacenar letras adivinadas o guion bajo
+let errores = 0; // El contador de errores
 const maxErrores = 7; // Número máximo de errores permitidos
-let puntos = 0; // Contador de puntos
+let puntos = 0; // El contador de puntos
 let playerName = ''; // Almacena el nombre del jugador
 
 // Toma de elementos del HTML
@@ -30,13 +32,13 @@ const intro = document.getElementById('intro');
 const formName = document.getElementById('name-form');
 const playerNameInput = document.getElementById('player-name');
 
-// Función para elegir una palabra aleatoria del array
+// Esta función elegue una palabra aleatoria del array
 function elegirPalabra() {
     const indiceAleatorio = Math.floor(Math.random() * palabras.length);
     palabraElegida = palabras[indiceAleatorio];
 }
 
-// Función para mostrar la palabra en la interfaz con guiones bajos para las letras no adivinadas
+// Muestra la palabra en la interfaz con guion bajos para las letras que todavia no fueron adivinadas
 function mostrarPalabra() {
     elementoPalabra.innerHTML = palabraAdivinada.join(' ');
 }
@@ -63,7 +65,7 @@ function reiniciarJuego() {
     // Reinicia la imagen del ahorcado
     imagenAhorcado.src = `images/0.png`;
 
-    // Elige una nueva palabra y la muestra como guiones bajos
+    // Elige una nueva palabra y la muestra con guion bajo dependiendo el largo de la palabra
     elegirPalabra();
     for (let i = 0; i < palabraElegida.length; i++) {
         palabraAdivinada.push('_');
@@ -127,7 +129,7 @@ function guardarPuntaje() {
 
 // Función para verificar el estado del juego (si ganó o perdió)
 function verificarEstadoJuego() {
-    if (!palabraAdivinada.includes('_')) { // Verifica si ganó (no hay guiones bajos)
+    if (!palabraAdivinada.includes('_')) { // Verifica si ganó (no hay guion bajos)
         elementoMensaje.innerHTML = '¡Ganaste!';
         elementoLetras.querySelectorAll('.letter').forEach(boton => {
             boton.disabled = true;
@@ -142,7 +144,7 @@ function verificarEstadoJuego() {
     }
 }
 
-// Manejador para el envío del formulario de nombre
+// Maneja el envío del formulario con el nombre
 formName.addEventListener('submit', function(event) {
     event.preventDefault();
     playerName = playerNameInput.value.trim();
